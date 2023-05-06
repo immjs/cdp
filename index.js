@@ -4,10 +4,8 @@ const appNH = express.Router();
 const fetch = require("node-fetch");
 const vhost = require('vhost')
 
-appNH.set('view engine', 'ejs');
-
 appNH.get('/', (req, res) => {
-    res.status(200).render(__dirname + '/index.ejs', { domain: "cdp.immjs.dev" });
+    res.status(200).sendFile(__dirname + '/index.html');
 });
 
 appOH.get('/new_cat', async (req, res) => {
@@ -31,11 +29,11 @@ appOH.get('/new_koala', async (req, res) => {
 })
 
 appOH.get('/', (req, res) => {
-    res.status(200).render(__dirname + '/index.ejs', { domain: "cdp.immjs.dev", host: req.hostname });
+    res.status(200).sendFile(__dirname + '/index.html');
 });
 
 appOH.get('/', async (req, res) => {
-    res.sendFile(__dirname + '/indexOH.html')
+    res.sendFile(__dirname + '/index.html')
 })
 
 const dnsHandler = express.Router()

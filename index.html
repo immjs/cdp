@@ -44,14 +44,14 @@
 <body>
   <h1><%= host %> is taken! But you can get these :3</h1>
   <div>
-    <img id="cat" src="https://<%= domain %>/new_cat" onclick="regen('cat')"/>
-    <img id="dog" src="https://<%= domain %>/new_dog" onclick="regen('dog')"/>
-    <img id="panda" src="https://<%= domain %>/new_panda" onclick="regen('panda')"/>
-    <img id="koala" src="https://<%= domain %>/new_koala" onclick="regen('koala')"/>
+    <img id="cat" src="https://cdp.immjs.dev/new_cat" onclick="regen('cat')"/>
+    <img id="dog" src="https://cdp.immjs.dev/new_dog" onclick="regen('dog')"/>
+    <img id="panda" src="https://cdp.immjs.dev/new_panda" onclick="regen('panda')"/>
+    <img id="koala" src="https://cdp.immjs.dev/new_koala" onclick="regen('koala')"/>
   </div>
   <script>
     window.onscroll=()=>window.scrollTo(window.scrollX, window.scrollY)
-    const orighost="<%= domain %>"
+    const orighost="cdp.immjs.dev"
     const ids=['cat', 'dog', 'panda', 'koala']
     let hh=window.innerHeight/2
     let hw=window.innerWidth/2
