@@ -7,7 +7,7 @@ const vhost = require('vhost')
 appNH.set('view engine', 'ejs');
 
 appNH.get('/', (req, res) => {
-    res.status(200).render(__dirname + '/index.ejs', { domain: "cdp.imm.codes" });
+    res.status(200).render(__dirname + '/index.ejs', { domain: "cdp.immjs.dev" });
 });
 
 appOH.get('/new_cat', async (req, res) => {
@@ -31,7 +31,7 @@ appOH.get('/new_koala', async (req, res) => {
 })
 
 appOH.get('/', (req, res) => {
-    res.status(200).render(__dirname + '/index.ejs', { domain: "cdp.imm.codes", host: req.hostname });
+    res.status(200).render(__dirname + '/index.ejs', { domain: "cdp.immjs.dev", host: req.hostname });
 });
 
 appOH.get('/', async (req, res) => {
@@ -40,7 +40,7 @@ appOH.get('/', async (req, res) => {
 
 const dnsHandler = express()
 
-dnsHandler.use(vhost("cdp.imm.codes", appOH))
+dnsHandler.use(vhost("cdp.immjs.dev", appOH))
 dnsHandler.use(vhost("*", appNH))
 
 dnsHandler.listen(3000, () => {
