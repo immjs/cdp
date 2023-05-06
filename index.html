@@ -42,7 +42,7 @@
   </style>
 </head>
 <body>
-  <h1><%= host %> is taken! But you can get these :3</h1>
+  <h1><span id="host"></span> is taken! But you can get these :3</h1>
   <div>
     <img id="cat" src="https://cdp.immjs.dev/new_cat" onclick="regen('cat')"/>
     <img id="dog" src="https://cdp.immjs.dev/new_dog" onclick="regen('dog')"/>
@@ -50,6 +50,7 @@
     <img id="koala" src="https://cdp.immjs.dev/new_koala" onclick="regen('koala')"/>
   </div>
   <script>
+    document.getElementById('host').innerText = location.hostname.toLowerCase();
     window.onscroll=()=>window.scrollTo(window.scrollX, window.scrollY)
     const orighost="cdp.immjs.dev"
     const ids=['cat', 'dog', 'panda', 'koala']
