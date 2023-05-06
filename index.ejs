@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cute animals</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    h1 {
+      position: absolute;
+      z-index: 1;
+      top: 0;
+      left: 0;
+      background-color: rgba(255, 255, 255, 0.5);
+      font-family: sans-serif;
+    }
+    img {
+      position: absolute;
+      z-index: -1;
+      object-fit: cover;
+      width: 50vw;
+      height: 50vh;
+      cursor: pointer;
+      transition: width 0.5s cubic-bezier(0.65, 0, 0.35, 1), height 0.5s cubic-bezier(0.65, 0, 0.35, 1), top 0.5s cubic-bezier(0.65, 0, 0.35, 1), left 0.5s cubic-bezier(0.65, 0, 0.35, 1);
+    }
+    #cat, #dog {
+      top: 0;
+    }
+    #cat, #panda {
+      left: 0;
+    }
+    #panda, #koala {
+      top: 50vh;
+    }
+    #dog, #koala {
+      left: 50vw;
+    }
+  </style>
+</head>
+<body>
+  <h1><%= host %> is taken! But you can get these :3</h1>
+  <div>
+    <img id="cat" src="https://<%= domain %>/new_cat" onclick="regen('cat')"/>
+    <img id="dog" src="https://<%= domain %>/new_dog" onclick="regen('dog')"/>
+    <img id="panda" src="https://<%= domain %>/new_panda" onclick="regen('panda')"/>
+    <img id="koala" src="https://<%= domain %>/new_koala" onclick="regen('koala')"/>
+  </div>
+  <script>
+    window.onscroll=()=>window.scrollTo(window.scrollX, window.scrollY)
+    const orighost="<%= domain %>"
+    const ids=['cat', 'dog', 'panda', 'koala']
+    let hh=window.innerHeight/2
+    let hw=window.innerWidth/2
+    let mX=0
+    let mY=0
+    let pending=false;
+    const regen=animal=>{
+      document.getElementById(animal).style.cursor="wait"
+      document.getElementById(animal).src=`https://${orighost}/new_${animal}?ts=${Date.now()}`
+    }
+    document.addEventListener("mousemove", event => {
+      mX = event.clientX;
+      mY = event.clientY;
+    });
+    let pos={
+      cat: [0, 0],
+      dog: [0, hw],
+      panda: [hh, 0],
+      koala: [hh, hw]
+    }
+    const awaitfor = fn => new Promise(r=>{
+      const interval = setInterval(()=>{
+        if(fn()){
+          clearInterval(interval)
+          r()
+        }
+      }, 100)
+    })
+    const addEvent = (obj, evt, fn) => {
+      if (obj.addEventListener) {
+        obj.addEventListener(evt, fn, false);
+      } else if (obj.attachEvent) {
+        obj.attachEvent("on" + evt, fn);
+      }
+    }
+    addEvent(document, 'mouseout', evt => {
+      if (evt.toElement == null && evt.relatedTarget == null) {
+        mX=-1;
+        mY=-1;
+      }
+    });
+    window.addEventListener('resize', event => {
+      hw = window.innerWidth/2;
+      hh = window.innerHeight/2;
+      pos = {
+        cat: [0, 0],
+        dog: [0, hw],
+        panda: [hh, 0],
+        koala: [hh, hw]
+      }
+      ids.forEach(v=>{
+        document.getElementById(v).style.transition = "none";
+        document.getElementById(v).style.width = hw+"px";
+        document.getElementById(v).style.height = hh+"px";
+        document.getElementById(v).style.top = pos[v][0]+"px";
+        document.getElementById(v).style.left = pos[v][1]+"px";
+        flushCss(document.getElementById(v));
+        document.getElementById(v).style.transition = "";
+      })
+    });
+    function flushCss(element) {
+      element.offsetHeight;
+    }
+    window.onload=()=>ids.forEach(v=>{
+      document.getElementById(v).ondragstart = () => false;
+      document.getElementById(v).onload = () => document.getElementById(v).style.cursor='pointer'
+      document.getElementById(v).onmouseover = async () => {
+        console.log('e')
+        await awaitfor(()=>!pending)
+        console.log('e')
+        document.getElementById(v).style.top = "0px";
+        document.getElementById(v).style.left = "0px";
+        document.getElementById(v).style.height = hh*2+"px";
+        document.getElementById(v).style.width = hw*2+"px";
+        document.getElementById(v).style.zIndex = 0;
+        ids.forEach(v1=>{
+          if(v!=v1) document.getElementById(v1).style.zIndex = -1;
+        })
+        await awaitfor(()=>(mY<pos[v][0]||mY>pos[v][0]+hh||mX<pos[v][1]||mX>pos[v][1]+hw))
+        document.getElementById(v).style.top = pos[v][0]+"px";
+        document.getElementById(v).style.left = pos[v][1]+"px";
+        document.getElementById(v).style.height = hh+"px";
+        document.getElementById(v).style.width = hw+"px";
+        pending = true;
+        setTimeout(() => {
+          document.getElementById(v).style.zIndex = -1;
+          pending = false;
+        }, 1000)
+      }
+    });
+    
+    /*if(location.hostname.toLowerCase()==orighost){
+      location.href=`https://${orighost}/about`
+    }*/
+  </script>
+</body>
+</html>
