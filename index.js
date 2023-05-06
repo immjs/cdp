@@ -1,6 +1,6 @@
 const express = require('express');
-const appOH = express();
-const appNH = express();
+const appOH = express.Router();
+const appNH = express.Router();
 const fetch = require("node-fetch");
 const vhost = require('vhost')
 
@@ -38,11 +38,9 @@ appOH.get('/', async (req, res) => {
     res.sendFile(__dirname + '/indexOH.html')
 })
 
-const dnsHandler = express()
+const dnsHandler = express.Router()
 
 dnsHandler.use(vhost("cdp.immjs.dev", appOH))
 dnsHandler.use(vhost("*", appNH))
 
-dnsHandler.listen(3000, () => {
-    console.log(`Server started at port ${3000}`);
-});
+module.exports = dnsHandler;
